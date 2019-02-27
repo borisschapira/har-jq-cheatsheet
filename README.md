@@ -9,6 +9,8 @@ To get HAR file:
 * Right click -> Copy -> Copy all as HAR
 * Paste into a new JSON fil.
 
+## Images
+
 * Listing all images with size and times
 ```jq
 .log.entries[] | 
@@ -50,4 +52,16 @@ To get HAR file:
     match("png|jpg|PNG|JPG|jpeg|JPEG")
   ) | {r: .response} 
 ] | reduce(.[]) as $i (0; . += $i.r._transferSize)
+
+## 3rd Parties
+
+* Count number of request not coming from the mydomain.com domain
+```jq
+[
+  .log.entries[] |
+  select(.request.url
+    contains("mydomain.com") 
+      | not
+  )
+] | length
 ```
